@@ -27,6 +27,13 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
+      # Extract version from the release tag (remove "v" if present)
+      - name: Set package.json version from tag
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/}
+          CLEAN_VERSION=${TAG_VERSION#v}
+          echo "Publishing version $CLEAN_VERSION"
+          npm version $CLEAN_VERSION --no-git-tag-version
       - run: npm ci
       - run: npm publish
         env:
