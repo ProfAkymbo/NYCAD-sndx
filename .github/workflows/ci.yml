@@ -3,7 +3,7 @@ name: Node.js Package
 on:
   push:
     branches:
-      - main   # 👈 change if your default branch is different
+      - main   # change if your default branch is different
 
 permissions:
   contents: write   # needed to create GitHub Releases
