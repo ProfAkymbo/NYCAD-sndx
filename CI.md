@@ -6,12 +6,9 @@ The CI workflow ensures code quality and consistency before changes are merged o
 ---
 
 ## 📂 Workflow File
-- Location: `.github/workflows/ci.yml`
-- Trigger: Runs on every `push` event.
-- Jobs: 
-  - **Backend** (build + test)
-  - **Frontend** (build + test)
-- Node.js versions: **18, 20, 22**
+- Create: `.github/workflows/ci.yml` in the Repo root
+- Push code to trigger CI: Runs on every `push` event.
+- GitHub Actions: Installs dependencies, Builds backend & frontend in parallel, Runs tests if available, Workflow passes only if all jobs succeed.
 
 ---
 
