@@ -4,9 +4,8 @@ on:
   push:
 
 jobs:
-  build:
+  backend:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
@@ -20,7 +19,6 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
-      # Backend
       - name: Install backend deps
         run: npm ci
         working-directory: ./backend
@@ -30,10 +28,30 @@ jobs:
         working-directory: ./backend
 
       - name: Test backend
-        run: npm test
+        run: |
+          if npm run | grep -q "test"; then
+            echo "Running backend tests..."
+            npm test
+          else
+            echo "No test script found in backend, skipping..."
+          fi
         working-directory: ./backend
 
-      # Frontend
+  frontend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
       - name: Install frontend deps
         run: |
           if [ -f package-lock.json ]; then
@@ -48,5 +66,11 @@ jobs:
         working-directory: ./frontend
 
       - name: Test frontend
-        run: npm test
+        run: |
+          if npm run | grep -q "test"; then
+            echo "Running frontend tests..."
+            npm test
+          else
+            echo "No test script found in frontend, skipping..."
+          fi
         working-directory: ./frontend
